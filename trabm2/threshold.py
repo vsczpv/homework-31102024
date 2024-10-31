@@ -25,6 +25,14 @@ def dilatation(img_in, struct):
     ab  = (abc    + 1) * 255
     return ab
 
+def opening(img_in, struct):
+    C = erosion(img_in, struct)
+    return dilatation(C, struct)
+
+def closure(img_in, struct):
+    C = dilatation(img_in, struct)
+    return erosion(C, struct)
+
 def binary_threshold(img_in, thresh):
 
     img_in = img_in.copy()

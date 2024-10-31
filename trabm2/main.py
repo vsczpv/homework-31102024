@@ -2,8 +2,16 @@
 import trabm2.util      as util
 import trabm2.threshold as thresh
 import trabm2.skinseg   as skinseg
+import trabm2.kmeans    as kmeans
+from tqdm  import tqdm
 import cv2 as cv2
 import time
+import numpy as np
+
+def treat_fingerprint(img_in, struct=np.array([[1,1,1],[1,1,1],[1,1,1]])):
+    img_in = (img_in + 1) * 255
+    res = thresh.closure(thresh.opening(img_in, struct), struct)
+    return (res + 1) * 255
 
 def threshes(img_orig, img_dsalt, img_dgaus):
     
@@ -11,26 +19,29 @@ def threshes(img_orig, img_dsalt, img_dgaus):
     img_sotsu = thresh.otsu_threshold(img_dsalt)
     img_gotsu = thresh.otsu_threshold(img_dgaus)
 
-    util.showimg(img_ootsu, title='OOtsu')
-    for i in [112, 120, 128, 144]:
-        util.showimg(thresh.binary_threshold(img_orig, i), title='OBasica' + str(i))
-    util.pause()
+    cv2.imwrite('results/dig_ootsu.png', img_ootsu)
+    cv2.imwrite('results/dig_treat_ootsu.png', treat_fingerprint(img_ootsu))
+    for i in tqdm([112, 120, 128, 144]):
+        nrm = thresh.binary_threshold(img_orig, i)
+        cv2.imwrite('results/dig_obasic_' + str(i) + '.png', nrm)
+        alt = treat_fingerprint(nrm)
+        cv2.imwrite('results/dig_treat_obasic_' + str(i) + '.png', alt)
 
-    util.showimg(img_sotsu, title='SOtsu')
-    for i in [112, 120, 128, 144]:
-        util.showimg(thresh.binary_threshold(img_dsalt, i), title='SBasica' + str(i))
-    util.pause()
+    cv2.imwrite('results/dig_sotsu.png', img_sotsu)
+    cv2.imwrite('results/dig_treat_sotsu.png', treat_fingerprint(img_sotsu))
+    for i in tqdm([112, 120, 128, 144]):
+        nrm = thresh.binary_threshold(img_dsalt, i)
+        cv2.imwrite('results/dig_sbasic_' + str(i) + '.png', nrm)
+        alt = treat_fingerprint(nrm)
+        cv2.imwrite('results/dig_treat_sbasic_' + str(i) + '.png', alt)
 
-    util.showimg(img_gotsu, title='GOtsu')
-    for i in [112, 120, 128, 144]:
-        util.showimg(thresh.binary_threshold(img_dgaus, i), title='GBasica' + str(i))
-    util.pause()
-
-    util.showimg(img_sotsu, title='SOtsu')
-    util.showimg(img_gotsu, title='GOtsu')
-    util.showimg(thresh.binary_threshold(img_dsalt, 120), title='SBasica120')
-    util.showimg(thresh.binary_threshold(img_dgaus, 120), title='GBasica120')
-    util.pause()
+    cv2.imwrite('results/dig_gotsu.png', img_gotsu)
+    cv2.imwrite('results/dig_treat_gotsu.png', treat_fingerprint(img_gotsu))
+     for i in tqdm([112, 120, 128, 144]):
+         nrm = thresh.binary_threshold(img_dgaus, i)
+         cv2.imwrite('results/dig_gbasic_' + str(i) + '.png', nrm)
+         alt = treat_fingerprint(nrm)
+         cv2.imwrite('results/dig_treat_gbasic_' + str(i) + '.png', alt)
 
 def main():
     img_orig  = util.openimg('data/digital.jpg')
