@@ -2,33 +2,22 @@
 import numpy as np
 import cv2   as cv2
 
-def erosion(img_in, struct):
-  img_out = np.zeros([img_in.shape[0], img_in.shape[1]], dtype=np.uint8)
+def erosion(imagem, kernel=[[1,1,1],[1,1,1],[1,1,1],[1,1,1]]):
+    imagem_erodida = np.zeros(imagem.shape, dtype=np.uint8)
+    kernel = np.array(kernel)
+    offI = int(np.floor(kernel.shape[1]/2.0))# Centro vertical do kernel
+    imparI = kernel.shape[1]%2 # Se for impar, é somado 1 pelo motivo comentado dentro dos lassos for
+    offJ = int(np.floor(kernel.shape[0]/2.0))# Centro horizontal do kernel
+    imparJ = kernel.shape[0]%2
+    for i in range(offI, int(imagem.shape[1]) - offI):# Executa apenas aonde o Kernel não sai da imagem
+        for j in range(offJ, int(imagem.shape[0]) - offJ):
+            if (kernel * imagem[int(j - offJ):int(j + offJ + imparJ), int(i - offI):int(i + offI + imparI)]).all() > 0:# Se nenhum for zero, executa
+                                              #Se fizer (i - offI):(i+ offI), ele retorna i-offI e I, o ponto de parada não entra no cálculo
+                imagem_erodida[j, i] = 255
+            else:
+                imagem_erodida[j, i] = 0
 
-  w = img_in.shape[0]
-  h = img_in.shape[1]
-  s = struct.shape[0] // 2
-
-  mc = np.count_nonzero(struct)
-
-  for y in range(h):
-    for x in range(w):
-      count = 0
-      for t in range(-s, 1+s):
-        for r in range(-s, 1+s):
-          u = y + t
-          v = x + r
-          if (v <  0 or u <  0):
-            continue
-          if (v >= w or u >= h):
-            continue
-          if struct[r+s][t+s] == 255:
-            if img_in[v][u] == 255:
-              count += 1
-      if count == mc:
-        img_out[x][y] = 255
-
-  return img_out
+    return imagem_erodida
 
 def dilatation(img_in, struct):
     ac  = (img_in + 1) * 255
