@@ -45,13 +45,8 @@ def threshes(img_orig, img_dsalt, img_dgaus):
 
 def main():
     img_orig  = util.openimg('data/digital.jpg')
-    img_dsalt = util.salt_n_pepper (img_orig)
-    img_dgaus = util.gaussian_noise(img_orig)
-
-#   util.showimg(img_orig,  title='Original')
-#   util.showimg(img_dgaus, title='GaussianNoise')
-#   util.showimg(img_dsalt, title='SaltnPepper')
-#   util.pause()
+    img_dsalt = util.openimg('data/digital_salt.png')  # util.salt_n_pepper (img_orig)
+    img_dgaus = util.openimg('data/digital_gauss.png') # util.gaussian_noise(img_orig)
 
     threshes(img_orig, img_dsalt, img_dgaus)
 
