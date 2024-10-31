@@ -1,0 +1,11 @@
+#!/bin/sh
+# SPDX-License-Identifier: 0BSD
+set -x
+rm -rf venv
+python3 -m venv venv
+set +x
+. venv/bin/activate
+set -x
+python3 -m pip install --upgrade pip 
+python3 -m pip --version
+pip install opencv-python scikit-image tqdm

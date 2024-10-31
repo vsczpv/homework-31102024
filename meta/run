@@ -1,0 +1,5 @@
+#!/bin/sh
+# SPDX-License-Identifier: 0BSD
+. venv/bin/activate
+set -x
+python3 -m trabm2.__init__
