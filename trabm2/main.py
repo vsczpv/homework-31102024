@@ -33,7 +33,7 @@ def threshes(img_orig, img_dsalt, img_dgaus):
         nrm = thresh.binary_threshold(img_dsalt, i)
         cv2.imwrite('results/dig_sbasic_' + str(i) + '.png', nrm)
         alt = treat_fingerprint(nrm)
-        cv2.imwrite('results/dig_treat_sbasic_' + str(i) + '.png', alt)
+         cv2.imwrite('results/dig_treat_sbasic_' + str(i) + '.png', alt)
 
     cv2.imwrite('results/dig_gotsu.png', img_gotsu)
     cv2.imwrite('results/dig_treat_gotsu.png', treat_fingerprint(img_gotsu))
@@ -53,10 +53,21 @@ def main():
 #   util.showimg(img_dsalt, title='SaltnPepper')
 #   util.pause()
 
-#   threshes(img_orig, img_dsalt, img_dgaus)    
-#   util.pause()
+    threshes(img_orig, img_dsalt, img_dgaus)
 
-    for i in range(1, 5):
-        util.showimg(skinseg.SkinSegmentation(util.openimg('data/face' + str(i) + '.jpg', color=True)), title='SkinSeg' + str(i))
+    for t in ['all', 'rgb', 'ycrcb', 'hsv']:
+        for i in [1, 2, 3, 4]:
+            img = skinseg.SkinSegmentation(util.openimg('data/face' + str(i) + '.jpg', color=True), mode=t)
+            cv2.imwrite('results/skinseg_' + t + '_' + str(i) + '.png', img)
 
-    util.pause()
+    for t in ['all', 'hsv']:
+        for i in [1, 2, 3, 4]:
+            img = skinseg.SkinSegmentation(util.openimg('data/face' + str(i) + '.jpg', color=True), mode=t, arg=[0,20])
+            cv2.imwrite('results/alt_skinseg_' + t + '_' + str(i) + '.png', img)
+
+    for i in [1, 2, 4]:
+        path = 'data/face' + str(i) + '.jpg'
+        for j in [2, 3, 4, 5, 6]:
+            kmeans.KMeans3D(util.openimg(path, color=True), k=j, max_iterations=30,  title=str(i))
+            kmeans.KMeans3D(util.openimg(path, color=True), k=j, max_iterations=100, title=str(i))
+    
