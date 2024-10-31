@@ -8,4 +8,4 @@ set +x
 set -x
 python3 -m pip install --upgrade pip 
 python3 -m pip --version
-pip install opencv-python scikit-image tqdm
+pip install opencv-python scikit-image tqdm matplotlib
