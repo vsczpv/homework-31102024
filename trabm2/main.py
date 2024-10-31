@@ -33,15 +33,16 @@ def threshes(img_orig, img_dsalt, img_dgaus):
         nrm = thresh.binary_threshold(img_dsalt, i)
         cv2.imwrite('results/dig_sbasic_' + str(i) + '.png', nrm)
         alt = treat_fingerprint(nrm)
-         cv2.imwrite('results/dig_treat_sbasic_' + str(i) + '.png', alt)
+        cv2.imwrite('results/dig_treat_sbasic_' + str(i) + '.png', alt)
 
     cv2.imwrite('results/dig_gotsu.png', img_gotsu)
     cv2.imwrite('results/dig_treat_gotsu.png', treat_fingerprint(img_gotsu))
-     for i in tqdm([112, 120, 128, 144]):
-         nrm = thresh.binary_threshold(img_dgaus, i)
-         cv2.imwrite('results/dig_gbasic_' + str(i) + '.png', nrm)
-         alt = treat_fingerprint(nrm)
-         cv2.imwrite('results/dig_treat_gbasic_' + str(i) + '.png', alt)
+    for i in tqdm([112, 120, 128, 144]):
+        nrm = thresh.binary_threshold(img_dgaus, i)
+        cv2.imwrite('results/dig_gbasic_' + str(i) + '.png', nrm)
+        alt = treat_fingerprint(nrm)
+        cv2.imwrite('results/dig_treat_gbasic_' + str(i) + '.png', alt)
+
 
 def main():
     img_orig  = util.openimg('data/digital.jpg')
